@@ -12,6 +12,9 @@ def test_wilson_hand_values():
     lo, hi = wilson(0, 10)
     assert lo == 0.0
     assert hi == pytest.approx(0.2775, abs=1e-4)
+    lo, hi = wilson(10, 10)
+    assert hi == 1.0
+    assert lo == pytest.approx(0.7225, abs=1e-4)
     assert wilson(0, 0) == (0.0, 1.0)
 
 
