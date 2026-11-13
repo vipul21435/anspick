@@ -50,3 +50,47 @@ def test_extract_dispatch_errors():
         extract("1", "date")
     with pytest.raises(ValueError):
         extract("1", "number", policy="middle")
+
+
+def test_score_and_disagree(capsys):
+    assert main(["score", str(EXAMPLE)]) == 0
+    out = capsys.readouterr().out
+    assert "| cascade | 100.0 |" in out
+    assert main(["disagree", str(EXAMPLE), "-e", "cascade", "-e", "first", "--show", "3"]) == 0
+    out = capsys.readouterr().out
+    assert "## cascade minus first" in out and "## Differing outputs" in out
+    assert main(["disagree", str(EXAMPLE), "--format", "json"]) == 0
+    data = json.loads(capsys.readouterr().out)
+    assert len(data["pairs"]) == 3 and data["differing"]
+    assert main(["score", str(EXAMPLE), "--format", "json"]) == 0
+    assert json.loads(capsys.readouterr().out)["scores"][0]["n"] == 8
+    assert main(["disagree", str(EXAMPLE), "-e", "cascade"]) == 2
+
+
+def test_sample_round_trip(tmp_path, capsys):
+    out = tmp_path / "s.jsonl"
+    md = tmp_path / "s.md"
+    assert main(["sample", str(EXAMPLE), "-n", "3", "--out", str(out), "--markdown", str(md)]) == 0
+    rows = [json.loads(x) for x in out.read_text().splitlines()]
+    assert len(rows) == 3 and md.exists()
+    for r in rows:
+        r["read_answer"] = r["answers"]["cascade"]
+    out.write_text("".join(json.dumps(r) + "\n" for r in rows))
+    assert main(["sample", "--verdicts", str(out)]) == 0
+    assert "| cascade | 3 / 3 |" in capsys.readouterr().out
+    assert main(["sample", "--verdicts", str(out), "--format", "json"]) == 0
+    assert json.loads(capsys.readouterr().out)["read"] == 3
+    assert main(["sample", str(EXAMPLE), "-n", "2"]) == 0
+    assert len(capsys.readouterr().out.strip().splitlines()) == 2
+    assert main(["sample"]) == 2
+
+
+def test_explain(capsys):
+    assert main(["explain", str(EXAMPLE), "--id", "item-3"]) == 0
+    out = capsys.readouterr().out
+    assert "several-candidates" in out and "| marker | None |" in out
+    assert main(["explain", "--text", "So (B).", "--options", "x", "y", "--format", "json"]) == 0
+    data = json.loads(capsys.readouterr().out)
+    assert data["picks"]["cascade"]["answer"] == "B" and data["type"] == "choice"
+    assert main(["explain", str(EXAMPLE), "--id", "nope"]) == 2
+    assert main(["explain"]) == 2
