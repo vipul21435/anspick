@@ -107,3 +107,24 @@ def quoted_regions(text: str) -> list[tuple[int, int]]:
 
 def inside(pos: int, regions: list[tuple[int, int]]) -> bool:
     return any(a <= pos < b for a, b in regions)
+
+
+def assign_markers(text: str, spans: list[tuple[int, int]]) -> dict[int, str]:
+    """Map candidate index to the strongest marker governing it.
+
+    A boxed group marks the candidate inside it when it holds exactly one; ``hash`` and
+    ``answer`` mark the first candidate starting in the rest of their line.
+    """
+    rank = {name: i for i, name in enumerate(MARKER_ORDER)}
+    out: dict[int, str] = {}
+    for mk in find_markers(text):
+        if mk.name == "boxed":
+            inner = [i for i, (a, b) in enumerate(spans) if a >= mk.start and b <= mk.end]
+            chosen = inner if len(inner) == 1 else []
+        else:
+            chosen = [i for i, (a, _) in enumerate(spans) if mk.start <= a < mk.end][:1]
+        for i in chosen:
+            old = out.get(i)
+            if old is None or rank[mk.name] < rank[old]:
+                out[i] = mk.name
+    return out
