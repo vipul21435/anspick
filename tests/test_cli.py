@@ -100,3 +100,31 @@ def test_example_script_runs():
     import runpy
 
     runpy.run_path(str(EXAMPLE.parent / "compare_policies.py"), run_name="__main__")
+
+
+@pytest.mark.parametrize(
+    "row",
+    [[1, 2], {"output": "x", "options": "AB"}, {"output": "x", "type": "date"}],
+)
+def test_bad_records_are_rejected(tmp_path, row):
+    p = write(tmp_path, [row])
+    with pytest.raises(ValueError):
+        read_records(p)
+
+
+def test_record_fields_carry_through(tmp_path):
+    p = write(tmp_path, [{"output": {"text": "x"}, "labels": ["P", "Q"], "type": "choice", "z": 1}])
+    rec = read_records(p)[0]
+    assert rec.output == '{"text": "x"}' and rec.labels == ["P", "Q"] and rec.extra == {"z": 1}
+
+
+def test_field_extractor_reads_each_type():
+    from anspick.extractors import Extractor
+    from anspick.records import Record
+
+    yn = Record("1", "x", "yesno", extra={"p": "True"})
+    assert Extractor("field:p").run(yn).answer == "true"
+    sp = Record("1", "x", "span", extra={"p": "  blue whale "})
+    assert Extractor("field:p").run(sp).answer == "blue whale"
+    sp2 = Record("1", "x", "span", extra={"p": "reasoning\nAnswer: orca"})
+    assert Extractor("field:p").run(sp2).answer == "orca"
