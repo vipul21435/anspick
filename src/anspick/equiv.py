@@ -27,7 +27,8 @@ Yes/no: ``polarity``, so ``yes`` and ``true`` match each other, as do ``no`` and
 
 Spans: ``normalised``, equal after :func:`anspick.spans.normalise_span`.
 
-Every rule is symmetric in its two arguments. A missing extraction (``None``) never
+The number, yes/no and span rules are symmetric in their two arguments; the multiple-choice
+rules compare an extracted label with a reference. A missing extraction (``None``) never
 matches.
 """
 

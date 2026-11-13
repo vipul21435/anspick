@@ -136,10 +136,10 @@ candidate is inside quoted material.
 **Equivalence** (`equiv.py`), one rule at a time: exact rational equality (`3/4` = `0.75` = `\frac{3}{4}`), a
 relative and absolute tolerance, percent against proportion or against the bare number (`25%` matches `0.25` and
 `25` by default; `--percent` selects one reading or none), option label against label, option text or a 0-based
-index, yes against true, and normalised spans. Every rule is symmetric. The MATH release compares answers as
-strings after a fixed normalisation (Hendrycks et al. 2021, `modeling/math_equivalence.py`: `\dfrac` to `\frac`,
-`\frac12` to `\frac{1}{2}`, units, `\%` and spaces removed); anspick reads LaTeX numbers in the same spirit but
-compares them by value, so `0.75` also matches `\frac{3}{4}`.
+index, yes against true, and normalised spans. The number, yes/no and span rules are symmetric. The MATH release
+compares answers as strings after a fixed normalisation (Hendrycks et al. 2021, `modeling/math_equivalence.py`:
+`\dfrac` to `\frac`, `\frac12` to `\frac{1}{2}`, units, `\%` and spaces removed); anspick reads LaTeX numbers in
+the same spirit but compares them by value, so `0.75` also matches `\frac{3}{4}`.
 
 **Intervals and the gap split.** Accuracies carry Wilson score intervals. For two extractors on the same items the
 gap is `(1/n) sum_i (c_ref,i - c_other,i)`, with a seeded paired percentile bootstrap interval (2000 rounds by
