@@ -31,6 +31,10 @@ def _pct(x: float | None) -> str:
     return "-" if x is None else f"{100 * x:.1f}"
 
 
+def _dash(x: object) -> str:
+    return "-" if x is None else str(x)
+
+
 def _signed_pct(x: float | None) -> str:
     return "-" if x is None else f"{100 * x:+.1f}"
 
@@ -84,7 +88,7 @@ def cmd_score(args: argparse.Namespace) -> int:
     for r in rows:
         print(
             f"| {_md(r.extractor)} | {_pct(r.accuracy)} | {_pct(r.low)} to {_pct(r.high)} "
-            f"| {r.correct} / {r.n} | {r.no_answer} | {r.doubtful} |"
+            f"| {r.correct} / {r.n} | {r.no_answer} | {_dash(r.doubtful)} |"
         )
     return 0
 
@@ -124,7 +128,7 @@ def cmd_disagree(args: argparse.Namespace) -> int:
     for s in scores:
         print(
             f"| {_md(s.extractor)} | {_pct(s.accuracy)} | {_pct(s.low)} to {_pct(s.high)} "
-            f"| {s.no_answer} | {s.doubtful} |"
+            f"| {s.no_answer} | {_dash(s.doubtful)} |"
         )
     for p in pairs:
         print(f"\n## {_md(p.reference)} minus {_md(p.other)}\n")

@@ -2,7 +2,8 @@
 
 ``score``
     For each extractor: the accuracy over records with a reference, its Wilson interval,
-    the number of outputs with no answer, and the number flagged doubtful.
+    the number of outputs with no answer, and the number flagged doubtful (the doubt flag
+    belongs to the built-in extractors; ``field:`` and ``re:`` extractors report none).
 ``disagree``
     Every extractor is compared with a reference extractor (the first one given). For
     each pair: the accuracy gap, a paired bootstrap interval for it, the number of
@@ -19,6 +20,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass, field
 from typing import Any
 
+from anspick.core import POLICIES
 from anspick.equiv import equivalent, same_answer
 from anspick.extractors import Answer, Extractor
 from anspick.records import Record
@@ -78,7 +80,7 @@ class ScoreRow:
     low: float | None
     high: float | None
     no_answer: int
-    doubtful: int
+    doubtful: int | None
 
     def to_dict(self) -> dict[str, Any]:
         return dict(self.__dict__)
@@ -96,7 +98,7 @@ def score_row(run: Run, confidence: float = 0.95) -> ScoreRow:
         low=lo,
         high=hi,
         no_answer=sum(a.answer is None for a in run.answers),
-        doubtful=sum(bool(a.doubt) for a in run.answers),
+        doubtful=sum(bool(a.doubt) for a in run.answers) if run.name in POLICIES else None,
     )
 
 

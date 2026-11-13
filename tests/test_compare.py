@@ -52,6 +52,7 @@ def test_field_and_regex_extractors():
     run = run_extractor(Extractor("field:pred"), rs)
     assert run.answers[5].answer == "B" and run.correct[5]
     assert run.answers[0].answer is None
+    assert score_row(run).doubtful is None
     rx = run_extractor(Extractor(r"re:first:#### (\-?[0-9\.\,]+)"), rs)
     assert rx.answers[0].answer == "7" and rx.answers[0].rule == "regex"
     assert rx.answers[1].answer is None
