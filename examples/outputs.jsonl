@@ -1,0 +1,8 @@
+{"id": "item-1", "type": "number", "output": "Each box holds 12 eggs and there are 3 boxes, so 3 x 12 = 36 eggs.\n#### 36", "gold": "36"}
+{"id": "item-2", "type": "number", "output": "The ratio is \\boxed{\\frac{3}{4}}, which is 0.75 as a decimal.", "gold": "0.75"}
+{"id": "item-3", "type": "number", "output": "First I thought 40, but recounting gives 42. Actually it is 40 after all.", "gold": "40"}
+{"id": "item-4", "options": ["Paris", "London", "Berlin", "Madrid"], "output": "A) Paris\nB) London\nC) Berlin\nD) Madrid\n\nThe capital of Germany is Berlin, so the answer is (C).", "gold": "C"}
+{"id": "item-5", "options": ["Paris", "London", "Berlin", "Madrid"], "output": "It is either B or D; I lean towards Madrid.", "gold": "D"}
+{"id": "item-6", "type": "yesno", "output": "There is no reason to think it halts. No.", "gold": "no"}
+{"id": "item-7", "type": "number", "output": "The discount is 25% of the price.", "gold": "0.25"}
+{"id": "item-8", "type": "span", "output": "Thinking about the largest mammals...\nThe answer is: the blue whale.", "gold": "Blue whale"}
