@@ -61,3 +61,16 @@ def test_written_numbers_round_trip(value, places):
     ex = numbers.extract(text)
     assert ex.answer is not None
     assert number_match(ex.answer, str(value / 10**places), rel_tol=1e-9) is not None
+
+
+words = st.sampled_from(
+    ["yes", "No", "TRUE", "false", "maybe", "The Cat", "cat", "a cat!", "", "dog"]
+)
+
+
+@given(words, words)
+def test_yes_no_and_span_equivalence_symmetric(a, b):
+    from anspick.equiv import span_match, yesno_match
+
+    assert (yesno_match(a, b) is None) == (yesno_match(b, a) is None)
+    assert (span_match(a, b) is None) == (span_match(b, a) is None)
