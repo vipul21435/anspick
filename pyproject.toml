@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "anspick"
+version = "0.1.0"
+description = "Pull the final answer out of free-form model output with documented rules, flag doubtful extractions, and measure what the extractor choice does to a score."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+authors = [{ name = "Vipul Raj Jha" }]
+keywords = ["evaluation", "answer extraction", "benchmarks", "llm", "scoring"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "pytest-cov>=4", "hypothesis>=6", "ruff>=0.5"]
+
+[project.scripts]
+anspick = "anspick.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/vipul21435/anspick"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/anspick"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
