@@ -94,3 +94,9 @@ def test_explain(capsys):
     assert data["picks"]["cascade"]["answer"] == "B" and data["type"] == "choice"
     assert main(["explain", str(EXAMPLE), "--id", "nope"]) == 2
     assert main(["explain"]) == 2
+
+
+def test_example_script_runs():
+    import runpy
+
+    runpy.run_path(str(EXAMPLE.parent / "compare_policies.py"), run_name="__main__")
