@@ -66,6 +66,12 @@ def to_markdown(rows: Sequence[dict[str, Any]]) -> str:
         out.append(row["output"].replace("```", "'''"))
         out.append("```")
         out.append("")
+        if row.get("options"):
+            labels = row.get("labels") or [chr(65 + i) for i in range(len(row["options"]))]
+            pairs = zip(labels, row["options"], strict=False)
+            opts = ", ".join(f"{lab}: {opt}" for lab, opt in pairs)
+            out.append(f"options: {opts}")
+            out.append("")
         for name, ans in row["answers"].items():
             out.append(f"- `{name}`: {ans}")
         out.append("- read answer: ")

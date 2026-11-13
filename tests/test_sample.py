@@ -54,3 +54,8 @@ def test_read_rows_rejects_other_files(tmp_path):
     p.write_text(json.dumps({"output": "1"}) + "\n", encoding="utf-8")
     with pytest.raises(ValueError):
         read_rows(str(p))
+
+
+def test_markdown_lists_options():
+    row = {"id": "1", "type": "choice", "output": "B", "options": ["x", "y"], "answers": {"a": "B"}}
+    assert "options: A: x, B: y" in to_markdown([row])
